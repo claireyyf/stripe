@@ -1,9 +1,80 @@
 // Set your secret key. Remember to switch to your live secret key in production.
 // See your keys here: https://dashboard.stripe.com/apikeys
+
+#create payment method "visa test card" first
+const stripe = require('stripe')('{{TEST_SECRET_KEY}}');
+
+const paymentMethod = await stripe.paymentMethods.create({
+  type: 'card',
+  card: {
+    token: 'tok_visa',
+  },
+});
+
+
+#create customer, attaching the created payment method (visa card ending in 4242 = test card)
 const stripe = require('stripe')('{{TEST_SECRET_KEY}}');
 
 const customer = await stripe.customers.create({
-  payment_method: 'pm_card_visa',
+  payment_method: 'pm_1Sp0O62c6rQIzWO6qajRaoef',
 });
 
-##resulting customer id: cus_TmZBtJ8cu4mg2N
+##Resulting customer id: cus_TmZZhfy0U4isuT
+
+
+-----------------------
+#Card Details
+##Result
+{
+  "id": "pm_1Sp0O62c6rQIzWO6qajRaoef",
+  "object": "payment_method",
+  "allow_redisplay": "unspecified",
+  "billing_details": {
+    "address": {
+      "city": null,
+      "country": null,
+      "line1": null,
+      "line2": null,
+      "postal_code": null,
+      "state": null
+    },
+    "email": null,
+    "name": null,
+    "phone": null,
+    "tax_id": null
+  },
+  "card": {
+    "brand": "visa",
+    "checks": {
+      "address_line1_check": null,
+      "address_postal_code_check": null,
+      "cvc_check": "unchecked"
+    },
+    "country": "US",
+    "display_brand": "visa",
+    "exp_month": 1,
+    "exp_year": 2027,
+    "fingerprint": "y2YOc6sD0ThVkJ5b",
+    "funding": "credit",
+    "generated_from": null,
+    "issuer": "Stripe Payments UK Limited",
+    "last4": "4242",
+    "networks": {
+      "available": [
+        "visa"
+      ],
+      "preferred": null
+    },
+    "regulated_status": "unregulated",
+    "three_d_secure_usage": {
+      "supported": true
+    },
+    "wallet": null
+  },
+  "created": 1768283010,
+  "customer": null,
+  "customer_account": null,
+  "livemode": false,
+  "metadata": {},
+  "type": "card"
+}
