@@ -1,0 +1,37 @@
+# 2a. Use an API call to create an authorization for $100. Provide the Payment Intent ID related to this authorization. >> payment_intent object
+# 2b. Log into your Stripe dashboard (https://dashboard.stripe.com/) and include a screenshot of the payment page for the authorization you just created. 
+# 2c. Use an API call to create a capture for $75. What happens to a charge if you only capture for a portion of an authorization, and not the full amount? 
+# 2d. How do steps 2a-2c show on the customer’s bank statement? 
+# 2e. Name and describe 2 distinct business models/use cases that would require auth and then capture at a later time.
+
+
+# 2a. create payment intent
+// Set your secret key. Remember to switch to your live secret key in production.
+// See your keys here: https://dashboard.stripe.com/apikeys
+const stripe = require('stripe')('{{TEST_SECRET_KEY}}');
+
+const paymentIntent = await stripe.paymentIntents.create({
+  amount: 100,
+  currency: 'usd',
+});
+
+##Result payment intent id: pi_3Sp0ZM2c6rQIzWO60bvyzctq
+**associate with customer
+
+# 2c. capture $75 
+**needs to confirm first using with setting "off-session"==true. Otherwise, cannot confirm because automatic redirect is on
+
+const stripe = require('stripe')('{{TEST_SECRET_KEY}}');
+
+const paymentIntent = await stripe.paymentIntents.capture(
+  'pi_3Sp0ZM2c6rQIzWO60bvyzctq',
+  {
+    amount_to_capture: 7500,
+  }
+);
+
+##result: remaining $25 returned to customer
+
+## 2d. When first authorized, statment will say $100 pending. With the actual charge, only $75 will show up with charged date on bank statement. The $100 will disappear when transaction takes place. 
+
+# 2e. use cases: 1. restaurant placeholder; 2. printers at work stations
